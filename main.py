@@ -22,6 +22,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
+        Player_1.update(dt)
         Player_1.draw(screen)
 
         # flip muxt be last
