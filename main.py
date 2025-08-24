@@ -1,29 +1,46 @@
 import pygame
 from player import Player
 from constants import *
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 
 def main():
-    # Constructor
+    # Constructor zone
     pygame.init()
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
     
+        # Creating group zone
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    target = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (updatable, drawable, target)
+    AsteroidField.containers = (updatable)
+
+    # initialize zone
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     Player_1 = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
+    barrage = AsteroidField()
     #created Clock object
     time_control = pygame.time.Clock()
     dt = 0
 
+    # Game loop zone
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
         screen.fill("black")
-        Player_1.update(dt)
-        Player_1.draw(screen)
+
+        updatable.update(dt)
+        for obj in drawable:
+            obj.draw(screen)
 
         # flip muxt be last
         pygame.display.flip()
