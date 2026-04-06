@@ -1,3 +1,5 @@
+import asyncio
+
 import pygame
 from player import Player, Shot
 from constants import *
@@ -5,14 +7,14 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 
 
-def main():
+async def main():
     # Constructor zone
     pygame.init()
     print("Starting Asteroids!")
     print(f"Screen width: {SCREEN_WIDTH}")
     print(f"Screen height: {SCREEN_HEIGHT}")
-    
-        # Creating group zone
+
+    # Creating group zone
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     target = pygame.sprite.Group()
@@ -34,7 +36,7 @@ def main():
     time_control = pygame.time.Clock()
     dt = 0
 
-    # Game loop zone
+    # Game loop zone (async yields to the browser when using pygbag)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -45,7 +47,7 @@ def main():
         for obj in target:
             if obj.collide(Player_1):
                 print("Game Over!")
-                exit(0)
+                return
         for obj in target:
             for bullet in projectiles:
                 if obj.collide(bullet):
@@ -54,10 +56,12 @@ def main():
         for obj in drawable:
             obj.draw(screen)
 
-        # these muxt be last
+        # these must be last
         pygame.display.flip()
         time_passed = time_control.tick(60)
-        dt = time_passed/1000
+        dt = time_passed / 1000
+        await asyncio.sleep(0)
+
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
