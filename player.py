@@ -27,6 +27,11 @@ class Player(CircleShape):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
+    def _clamp_to_screen(self):
+        m = PLAYER_SCREEN_MARGIN
+        self.position.x = max(m, min(SCREEN_WIDTH - m, self.position.x))
+        self.position.y = max(m, min(SCREEN_HEIGHT - m, self.position.y))
+
     def update(self, dt):
         self.timer -= dt   
         keys = pygame.key.get_pressed()
@@ -45,6 +50,8 @@ class Player(CircleShape):
             if self.timer < 0:
                 self.shoot()
                 self.timer = PLAYER_SHOOT_COOLDOWN
+
+        self._clamp_to_screen()
 
     def shoot(self):
         x, y = self.position

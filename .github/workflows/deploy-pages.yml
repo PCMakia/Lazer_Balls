@@ -31,7 +31,15 @@ jobs:
       - name: Build web bundle
         run: python -m pygbag --build .
 
-      - uses: actions/upload-pages-artifact@v3
+      # pygbag always emits the same filename (e.g. lazer_balls.apk). Browsers cache
+      # that URL aggressively, so players keep an old bundle after deploy. Append the
+      # commit id so each deploy requests a unique URL (same file on the server).
+      - name: Cache-bust APK URL in index.html
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+        run: python scripts/cache_bust_index_apk.py
+
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: build/web
 

@@ -6,7 +6,7 @@ dist/
 wheels/
 *.egg-info
 
-# Virtual environments
-.venv
-venv
+# Virtual environment — use only .venv (python3 -m venv .venv)
+.venv/
+venv/
 uv.lock
